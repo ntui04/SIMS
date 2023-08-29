@@ -1,0 +1,364 @@
+<?php 
+
+
+$dbhost="localhost";
+$dbuser="root";
+$dbname="sims";
+$dbpassword="";
+
+
+$connection=mysqli_connect($dbhost,$dbuser,$dbpassword,$dbname);
+
+if(isset($_POST['submit'])){
+     $regno = $_POST['regno'];
+     $jinalakwanza = $_POST['jinalakwanza'];
+     $jinalamwisho = $_POST['jinalamwisho'];
+     $baruapepe = $_POST['baruapepe'];
+     $namba = $_POST['namba'];
+     $college = $_POST['college'];
+     $department = $_POST['department'];
+     $kozi = $_POST['kozi'];
+     $mwaka= $_POST['mwaka'];
+     $password = $_POST['password'];
+ 
+     $query = "INSERT INTO student VALUES ('', '$regno', '$jinalakwanza', '$jinalamwisho', '$baruapepe', '$namba', '$college', '$department', '$kozi', '$mwaka', '$password')";
+ 
+     mysqli_query($connection, $query);
+     header("location: regster.php");
+ 
+    if($result){
+    echo" connection successfuly";
+    header('location: admin.php');
+    }
+    
+    else{
+        echo"connection failed";
+    }
+    
+
+    $sql ="SELECT * FROM department INNER JOIN college";
+    $result= $connection->query($sql);
+   
+    if($result->num_rows >0){
+      while($row =$result->fetch_assoc()){
+
+      }
+    }else{
+      echo "No results found";
+    }
+    $connection->close();
+  
+   
+}
+
+
+
+
+
+
+?>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>registration form</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./have.css">
+    <script src="./index.js"></script>
+    <script src="./depart.js"></script>
+
+</head>
+   <style>
+    button{
+        margin-left: 8rem;
+    }
+    body{
+   
+        align-items: center;
+      background-color: #fff;
+      margin-top: 0;
+        
+    }
+    form{
+      width: 500px;
+    /* margin: 20vh auto 0 auto; */
+    padding: 20px;
+    background-color: whitesmoke;
+    border-radius: 8px;
+    font-size: 12px;
+    margin-top: 0;
+    }
+    input{
+      border: 2px solid #f0f0f0;
+    border-radius: 8px;
+    display: block;
+    font-size: 12px;
+    padding: 10px;
+    width: 100%;
+    }
+    .input{
+      border: 2px solid #f0f0f0;
+    border-radius: 8px;
+    display: block;
+    font-size: 12px;
+    padding: 10px;
+    width: 100%;
+    }
+   
+    .fluid-container{
+      text-align: center;
+    }
+    h1{
+      text-transform: uppercase;
+      color: blueviolet;
+    }
+    .submit {
+    padding: 10px;
+    margin-top: 10px;
+    width: 100%;
+    color: white;
+    background-color: rgb(41, 57, 194);
+    border: none;
+    border-radius: 8px;
+}
+   
+    </style>
+   
+<script type="text/javascript" src="jquery-3.7.0.min.js"></script>
+
+<script>
+function getdepartment(val) {
+    console.log(val);
+$.ajax({
+type: "POST",
+url: "get_depatment.php",
+data:'department='+val,
+success: function(data){
+console.log(data);
+$('#program').html(data);
+}
+});
+}
+
+</script>
+
+
+
+
+     <body>
+<center>
+   
+   <form class="fluid-container" action="admin.php" method="POST">
+    <h1>registration form</h1><br>
+     
+        <label for="">Registration no</label>
+        <input name="regno" placeholder="enter your registration number" type="numbers" required><br><br>
+
+        <label for="">first Name</label>
+        <input name="jinalakwanza" placeholder="first name" type="text" required><br><br>
+
+       
+
+        <label for="">Last Name</label>
+        <input name="jinalamwisho" placeholder="Last name" type="text" required><br><br>
+
+        <!-- <label for="">program</label>
+        <input name="studentProgramId" placeholder="program" type="integer" required><br><br> -->
+
+
+        <label for="">Email</label>
+        <input name="baruapepe" placeholder="email" type="email" required><br><br>
+
+        
+         <label for="">Phone</label> 
+         <input name="namba" placeholder="phone" type="tel" required><br><br>
+
+        <label for="">Password</label>
+        <input name="Password" placeholder="password" type="password" required><br><br>
+
+        <label for="college">Select College:</label>
+        <select class="input" id="college" name="college" onchange="populateDepartments()">
+            <option value="">Select College</option>
+            <option value="COICT">COICT</option>
+            <option value="CET">CET</option>
+            <option value="COHBS">COHBS</option>
+            <option value="COSTE">COSTE</option>
+            <option value="COACT">COACT</option>
+          
+        </select>
+        <br>
+
+        <label for="department">Select Department:</label>
+        <select class="input" id="department" name="department" onChange="getdepartment(this.value)">
+            <option value="">Select Department</option>
+            <!-- Departments will be populated dynamically -->
+        </select>
+        <br>
+
+        <label for="kozi">Select kozi:</label>
+        <select class="input" id="kozi" name="kozi">
+            <option value="kozi">Select kozi</option>
+            <!-- Programs will be populated dynamically -->
+        </select>
+        <br>
+
+      
+
+    <script>
+        
+
+
+
+
+
+        function populateDepartments() {
+            var collegeSelect = document.getElementById("college");
+            var departmentSelect = document.getElementById("department");
+            
+            // Clear previous department options
+            departmentSelect.innerHTML = '<option value="">Select Department</option>';
+            
+            // Get selected college value
+            var selectedCollege = collegeSelect.value;
+            
+        
+            var department = {
+                COICT: ["computer science and engineering", "Electronics and telecommunication engineering","Informatics","Information systems and technology"],
+                CET: ["Civil engineering", "Electrical and power engineering","Geosciences and mining technology", "Mechanical and industrial engineering","Chemical and environmental engineering"],
+                COHBS: ["Business Management","Humanities"],
+                COACT: ["Architecture and Art design","Construction Management and Technology"],
+                COSTE:["Applied science","medical sciences and technology","Natural Resources","Technical education","Earth sciences","mathematical and statics"]
+                
+
+            };
+
+            if (selectedCollege in department) {
+                var departmentOptions = department[selectedCollege];
+                for (var i = 0; i < departmentOptions.length; i++) {
+                    var option = document.createElement("option");
+                    option.value = departmentOptions[i];
+                    option.text = departmentOptions[i];
+                    departmentSelect.appendChild(option);
+                }
+            }
+        }
+        function getdepartmentgg(val) {
+    var programSelect = document.getElementById("kozi");
+    // Clear previous program options
+         programSelect.innerHTML = '<option value="">Select kozi</option>';
+
+    // Get selected department value
+        var selectedDepartment = val;
+    // Use AJAX to fetch program data based on the selected department
+    // You can replace this with your own API endpoint or data source
+    // Simulate an example response for demonstration purposes
+    var kozi = {
+        "Computer science and engineering": ["computer engineering", "computer science", "Data science","computer computing"],
+        "Electronics and telecommunications engineering": ["telecommunication"],
+        "Informatics": ["ICT,IT"],
+        "Civil engineering": ["civil engineering", "Highway","technical education in civil engineering","technical education in Architectural Technology","technical education in Mechanical engineering","Natural Resources conservation"],
+        "Electrical and Power engineering": ["electrical engineering","mechatronics"],
+        "Geoscience and mining": ["mining engineering"],
+        "Architecture and Art Design":["Architecture","Technology in Architecture"],
+        "Construction Management and Technology": ["Technology in Landscape Architecture"],
+        "Applied science": ["food science and technology",""],
+        "Natural resource": ["Natural science"],
+        "medical science and technology": ["laboratory science and technology","Biomedical engineering"],
+        "Business management": ["business administration","Business administration in accounting and finance","business administration in marketing and enterpreneurship"],
+        "Humanities": ["Agribusiness Management and Technology", "Agribusiness with technology"],
+    };
+
+    if (selectedDepartment in kozi) {
+        var koziOptions = kozi[selectedDepartment];
+        for (var i = 0; i < koziOptions.length; i++) {
+            var option = document.createElement("option");
+            option.value = koziOptions[i];
+            option.text = koziOptions[i];
+            koziSelect.appendChild(option);
+        }
+    }
+}
+
+
+ </script>
+
+
+   <!-- <?php
+   $college = $_GET['college']; // Get selected college from AJAX request
+
+// Simulate fetching department data from a database
+//  Replace this with actual database queries in your application
+ $department = [
+     "COICT" => ["computer science and engineering", "Electronics and Telecommunication"],
+     "CET" => ["civil engineering", "electrical and power engineering"]
+ ];
+
+ if (isset($department[$college])) {
+     echo json_encode($department[$college]);
+ } else {
+     echo json_encode([]);
+ }
+ ?>
+
+
+      
+        <label for="">select college</label>
+        <select  name="college"  class="input">
+        <option value=""></option>
+     <?php
+
+     $sql="SELECT * FROM college";
+     $result=mysqli_query($connection,$sql);
+     if($result){
+        $i=1;
+        while($row=mysqli_fetch_assoc($result)){
+            $collegeName=$row['collegeName'];
+            $departmentName=$row['departmentName'];
+            echo "<option value='$collegeName'>$collegeName</option>";
+            echo "<option value='$departmentgeName'>$departmentName</option>";
+        }
+     }
+     
+
+     ?> 
+
+    </select><br>
+    <label for="">select department</label>
+    <select  name="department"  class="input">
+     <option value=""></option>
+     <?php
+
+     $sql="SELECT * FROM department";
+     $result=mysqli_query($connection,$sql);
+     if($result){
+        $i=1;
+        while($row=mysqli_fetch_assoc($result)){
+            
+            $departmentName=$row['departmentName'];
+            
+            echo "<option value='$departmentName'>$departmentName</option>";
+        }
+     }
+     
+
+     ?>
+
+    </select><br> -->
+
+     <input class="submit" type="submit" value="submit" name="submit">    
+  
+       </form>
+       </center>
+</body>
+</html>
